@@ -1,6 +1,8 @@
 package spell;
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.io.File;
+import java.util.Scanner;
 
 public class SpellCorrector implements ISpellCorrector{
 
@@ -14,11 +16,13 @@ public class SpellCorrector implements ISpellCorrector{
    */
    public void useDictionary(String dictionaryFileName) throws IOException{
      File file = new File(dictionaryFileName);
+     dictionary = new Trie();
 
      try {
        Scanner scanner = new Scanner(file);
 
        while (scanner.hasNext()) {
+         String word = Scanner.next().toLowerCase();
          dictionary.add(scanner.next());
        }
 
@@ -36,7 +40,7 @@ public class SpellCorrector implements ISpellCorrector{
    * @return The suggestion or null if there is no similar word in the dictionary
    */
   public String suggestSimilarWord(String inputWord){
-
+    return dictionary.toString();
   }
 
 }
