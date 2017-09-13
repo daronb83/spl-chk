@@ -4,6 +4,10 @@ import java.io.FileNotFoundException;
 import java.io.File;
 import java.util.Scanner;
 
+/**
+ * Suggests correctly spelled similar words for mispelled words, based on a frequency dictionary
+ * @author Daron Barnes
+ */
 public class SpellCorrector implements ISpellCorrector{
 
   Trie dictionary = null;
@@ -40,7 +44,12 @@ public class SpellCorrector implements ISpellCorrector{
    * @return The suggestion or null if there is no similar word in the dictionary
    */
   public String suggestSimilarWord(String inputWord){
-    return dictionary.toString();
+    return "Need to implement suggestSimilarWord()";
+  }
+
+  public void printDictionary(){
+    System.out.println(dictionary.toString());
+    System.out.println("Words: " + dictionary.getWordCount() + " : Nodes: " + dictionary.getNodeCount());
   }
 
 }
