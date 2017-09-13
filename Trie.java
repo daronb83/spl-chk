@@ -1,5 +1,6 @@
 package spell;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Represents a dictionary of words
@@ -22,10 +23,11 @@ public class Trie implements ITrie {
 	 * @param word The word being added to the trie
 	 */
 	public void add(String word) {
+    word = word.toLowerCase();
     Node temp = root;
 
     for (int i = 0; i < word.length(); i++) {
-      temp = temp.getNode(word.at(i));
+      temp = temp.getNode(word.charAt(i));
     }
 
     temp.incrementValue();  // the remaining node represents the last letter of the word
@@ -39,11 +41,12 @@ public class Trie implements ITrie {
 	 * 			or null if the word is not in the trie
 	 */
 	public INode find(String word) {
+    word = word.toLowerCase();
     Node temp = root;
 
     for (int i = 0; i < word.length(); i++) {
-      if (temp.containsKey(word.at(i)){
-          temp = temp.getNode(word.at(i));
+      if (temp.hasNode(word.charAt(i))){
+          temp = temp.getNode(word.charAt(i));
       }
       else {
         return null;
@@ -86,13 +89,13 @@ public class Trie implements ITrie {
 	 */
 	@Override
 	public String toString(){
-    ArrayList<String> words = root.getWords(New ArrayList<String>(), New StringBuilder());
-    words.sort();
+    ArrayList<String> words = root.getWords(new ArrayList<String>(), new StringBuilder());
+    Collections.sort(words);
 
     StringBuilder sb = new StringBuilder();
     for (String word : words) {
       sb.append(word);
-      sp.append("\n");
+      sb.append("\n");
     }
 
     return sb.toString();

@@ -13,18 +13,27 @@ public class Main {
 	 * as the second argument.
 	 */
 	public static void main(String[] args) throws IOException {
+		String dictionaryFileName = null;
+		String inputWord = null;
 
-		String dictionaryFileName = args[0];
-		String inputWord = args[1];
+		if (args.length == 2) {
+			dictionaryFileName = args[0];
+			inputWord = args[1];
+		}
+		else {
+			System.out.println("Usage: java spell.Main dictionaryFileName inputWord");
+			System.exit(0);
+		}
+
 
 		/**
 		 * Create an instance of your corrector here
 		 */
-		ISpellCorrector corrector = null;
+		SpellCorrector corrector = new SpellCorrector();
 
 		corrector.useDictionary(dictionaryFileName);
 		corrector.printDictionary();
-		
+
 		String suggestion = corrector.suggestSimilarWord(inputWord);
 		if (suggestion == null) {
 		    suggestion = "No similar word found";

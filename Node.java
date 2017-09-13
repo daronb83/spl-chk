@@ -43,13 +43,28 @@ public class Node implements ITrie.INode {
    */
   public Node getNode(char letter) {
     if (children[getIndex(letter)] == null) {
-      Node node = New Node();
+      Node node = new Node();
       children[getIndex(letter)] = node;
       size++;
       return node;
     }
     else {
       return children[getIndex(letter)];
+    }
+  }
+
+  /**
+   * Determines if 'children' contains a node representing 'letter.'
+   *
+   * @param letter the letter representing the node you want to check for
+   * @return true if the node exists, false otherwise
+   */
+  public boolean hasNode(char letter) {
+    if (children[getIndex(letter)] == null) {
+      return false;
+    }
+    else {
+      return true;
     }
   }
 
@@ -87,6 +102,45 @@ public class Node implements ITrie.INode {
       case 'x' : return 23;
       case 'y' : return 24;
       case 'z' : return 25;
+      default : return -1;
+    }
+  }
+
+  /**
+   * returns the letter represented by an array index
+   *
+   * @param index the index for which a letter is needed
+   * @return the letter represented by the array index
+   */
+  private char getLetter(int index) {
+    switch (index) {
+      case 0 : return 'a';
+      case 1 : return 'b';
+      case 2 : return 'c';
+      case 3 : return 'd';
+      case 4 : return 'e';
+      case 5 : return 'f';
+      case 6 : return 'g';
+      case 7 : return 'h';
+      case 8 : return 'i';
+      case 9 : return 'j';
+      case 10 : return 'k';
+      case 11 : return 'l';
+      case 12 : return 'm';
+      case 13 : return 'n';
+      case 14 : return 'o';
+      case 15 : return 'p';
+      case 16 : return 'q';
+      case 17 : return 'r';
+      case 18 : return 's';
+      case 19 : return 't';
+      case 20 : return 'u';
+      case 21 : return 'v';
+      case 22 : return 'w';
+      case 23 : return 'x';
+      case 24 : return 'y';
+      case 25 : return 'z';
+      default : return '0';
     }
   }
 
@@ -102,7 +156,7 @@ public class Node implements ITrie.INode {
   /**
    * Increments the frequency count for the word represented by the node
    */
-  private void incrementValue() {
+  public void incrementValue() {
     value++;
   }
 
@@ -121,8 +175,7 @@ public class Node implements ITrie.INode {
    * @return The number of unique words in the sub-trie
    */
   public int getWordCount() {
-    int count;
-    (value > 0) ? count = 1 : count = 0; // count yourself
+    int count = (value > 0) ? 1 : 0; // count yourself
 
     for (int i = 0; i < children.length; i++) {
       if (children[i] != null) {
@@ -165,7 +218,7 @@ public class Node implements ITrie.INode {
 
     for (int i = 0; i < children.length; i++) {
       if (children[i] != null) {
-        sb.append(getIndex(i));  // pre-appending the child's letter to sb
+        sb.append(getLetter(i));  // pre-appending the child's letter to sb
         children[i].getWords(wordList, sb);
         sb.setLength(sb.length() - 1); // pop this node's key so sb can be reused by the parent
       }

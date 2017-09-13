@@ -26,7 +26,6 @@ public class SpellCorrector implements ISpellCorrector{
        Scanner scanner = new Scanner(file);
 
        while (scanner.hasNext()) {
-         String word = Scanner.next().toLowerCase();
          dictionary.add(scanner.next());
        }
 
