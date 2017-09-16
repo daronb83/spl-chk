@@ -31,7 +31,12 @@ public class Main {
 		 */
 		SpellCorrector corrector = new SpellCorrector();
 
-		corrector.useDictionary(dictionaryFileName);
+		try{
+			corrector.useDictionary(dictionaryFileName);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		String suggestion = corrector.suggestSimilarWord(inputWord);
 		if (suggestion == null) {

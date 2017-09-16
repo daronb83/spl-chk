@@ -1,4 +1,5 @@
 package spell;
+
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.File;
@@ -19,27 +20,21 @@ public class SpellCorrector implements ISpellCorrector{
    * @param dictionaryFileName File containing the words to be used
    * @throws IOException If the file cannot be read
    */
-   public void useDictionary(String dictionaryFileName) throws IOException{
-     File file = new File(dictionaryFileName);
+   public void useDictionary(String dictionaryFileName) throws IOException {
      dictionary = new Trie();
+     File file = new File(dictionaryFileName);
+     Scanner scanner = new Scanner(file);
 
-     try {
-       Scanner scanner = new Scanner(file);
+      while (scanner.hasNext()) {
+       String word = scanner.next();
 
-       while (scanner.hasNext()) {
-         String word = scanner.next();
-
-         if (validateWord(word)) {
-           word = word.toLowerCase();
-           dictionary.add(word);
-         }
+       if (validateWord(word)) {
+         word = word.toLowerCase();
+         dictionary.add(word);
        }
+     }
 
-       scanner.close();
-     }
-     catch (FileNotFoundException e){
-       e.printStackTrace();
-     }
+     scanner.close();
    }
 
    /**
@@ -81,8 +76,8 @@ public class SpellCorrector implements ISpellCorrector{
     if (validWords.size() > 0) {
       return validWords.getBestWord();
     }
-    else {  // Distance 2
-      validWords = new FreqList();
+    else {
+      // Distance 2
       getD2(deletions, 0, validWords);
       getD2(transpositions, 1, validWords);
       getD2(alterations, 2, validWords);
@@ -109,7 +104,7 @@ public class SpellCorrector implements ISpellCorrector{
       sb.deleteCharAt(i);
       del.add(sb.toString());
     }
-    addValidWords(validWords, del);
+    addValidWords(del, validWords);
     return del;
   }
 
@@ -122,7 +117,7 @@ public class SpellCorrector implements ISpellCorrector{
       sb.setCharAt(i + 1, word.charAt(i));
       tran.add(word.toString());
     }
-    addValidWords(validWords, tran);
+    addValidWords(tran, validWords);
     return tran;
   }
 
@@ -136,7 +131,7 @@ public class SpellCorrector implements ISpellCorrector{
         alt.add(sb.toString());
       }
     }
-    addValidWords(validWords, alt);
+    addValidWords(alt, validWords);
     return alt;
   }
 
@@ -150,7 +145,7 @@ public class SpellCorrector implements ISpellCorrector{
         ins.add(sb.toString());
       }
     }
-    addValidWords(validWords, ins);
+    addValidWords(ins, validWords);
     return ins;
   }
 
@@ -182,7 +177,7 @@ public class SpellCorrector implements ISpellCorrector{
    *
    *
    */
-  private void addValidWords(FreqList validWords, ArrayList<String> strings) {
+  private void addValidWords(ArrayList<String> strings, FreqList validWords) {
 
     for (int i = 0; i < strings.size(); i++) {
       ITrie.INode node = dictionary.find(strings.get(i));

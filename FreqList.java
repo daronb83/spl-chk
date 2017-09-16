@@ -1,4 +1,5 @@
 package spell;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -16,12 +17,12 @@ public class FreqList {
   }
 
   /**f
-   * Stores a word, but only if it beats or matches the current frequency.
-   * If the new word's frequency is higher than the current frequency, the current frequency is
-   *  increased and all previously stored words are removed.
+   * Stores a word, but only if its frequency matches or exceeds the current frequency.
+   * If the new word's frequency exceeds the current frequency, the current frequency is
+   *  set to the new frequency and all previous words are dropped.
    *
-   * @param word the word to store
-   * @param frequency the frequency count of 'word'
+   * @param word the word to (potentially) store
+   * @param frequency the word's frequency count
    */
   public void add(String word, int frequency) {
     if (this.frequency < frequency) {

@@ -1,4 +1,5 @@
 package spell;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -144,7 +145,7 @@ public class Trie implements ITrie {
         current.setLength(current.length() - 1); // removes the last letter
       }
     }
-    
+
     return output.toString();
   }
 
