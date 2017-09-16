@@ -9,11 +9,13 @@ import java.util.Collections;
 public class Trie implements ITrie {
 
   private Node root;
+  private int wordCount;
+  private int nodeCount;
 
   /**
    * Represents a dictionary of words
    */
-  public Trie(){
+  public Trie() {
     root = new Node();
   }
 
@@ -23,14 +25,22 @@ public class Trie implements ITrie {
 	 * @param word The word being added to the trie
 	 */
 	public void add(String word) {
-    word = word.toLowerCase();
     Node temp = root;
 
     for (int i = 0; i < word.length(); i++) {
-      temp = temp.getNode(word.charAt(i));
+      int index = indexByLetter(word.charAt(i));
+
+      if (temp.hasNode(index)) {
+        temp = temp.getNode(index);
+      }
+      else {
+        temp = temp.addNode(index);
+        nodeCount++;
+      }
     }
 
     temp.incrementValue();  // the remaining node represents the last letter of the word
+    wordCount++;
   }
 
 	/**
@@ -41,36 +51,30 @@ public class Trie implements ITrie {
 	 * 			or null if the word is not in the trie
 	 */
 	public INode find(String word) {
-    word = word.toLowerCase();
     Node temp = root;
 
     for (int i = 0; i < word.length(); i++) {
-      if (temp.hasNode(word.charAt(i))){
-          temp = temp.getNode(word.charAt(i));
+      int index = indexByLetter(word.charAt(i));
+
+      if (temp.hasNode(index)){
+          temp = temp.getNode(index);
       }
       else {
         return null;
       }
+
     }
     return temp;
   }
 
-	/**
-	 * Returns the number of unique words in the trie
-	 *
-	 * @return The number of unique words in the trie
-	 */
-	public int getWordCount(){
-    return root.getWordCount();
-  }
 
   /**
-   * Returns the trie's root node
+   * Returns the number of unique words in the trie
    *
-   * @return the trie's root node
+   * @return The number of unique words in the trie
    */
-	public Node getRoot(){
-    return root;
+  public int getWordCount() {
+    return wordCount;
   }
 
 	/**
@@ -78,8 +82,39 @@ public class Trie implements ITrie {
 	 *
 	 * @return The number of children in the trie
 	 */
-	public int getNodeCount(){
-    return root.getNodeCount();
+	public int getNodeCount() {
+    return nodeCount;
+  }
+
+  /**
+   * returns the array index that represents a letter
+   *
+   * @param letter the letter for which an index is needed
+   * @return the array index of 'children' that represents 'letter'
+   */
+  private int indexByLetter(char letter) {
+    int output = letter - 'a';
+    return output;
+  }
+
+  /**
+   * returns the letter represented by an array index
+   *
+   * @param index the index for which a letter is needed
+   * @return the letter represented by the array index
+   */
+  private char letterByIndex(int index) {
+    char output = (char)('a' + index);
+    return output;
+  }
+
+  /**
+   * Returns the trie's root node
+   *
+   * @return the trie's root node
+   */
+  public Node getRoot() {
+    return root;
   }
 
 	/**
@@ -88,26 +123,40 @@ public class Trie implements ITrie {
 	 * <word>\n
 	 */
 	@Override
-	public String toString(){
-    ArrayList<String> words = root.getWords(new ArrayList<String>(), new StringBuilder());
-    Collections.sort(words);
+	public String toString() {
+    return toStringHelper(root, new StringBuilder(), new StringBuilder());  // recursive
+  }
 
-    StringBuilder sb = new StringBuilder();
-    for (String word : words) {
-      sb.append(word);
-      sb.append("\n");
+  /**
+   * Recursive helper for toString()
+   */
+  private String toStringHelper(Node node, StringBuilder current, StringBuilder output) {
+
+    if (node.getValue() > 0) {
+      output.append(current);
+      output.append("\n");
     }
 
-    return sb.toString();
+    for (int i = 0; i < 26; i++) {
+      if (node.hasNode(i)) {
+        current.append(letterByIndex(i));
+        toStringHelper(node.getNode(i), current, output);
+        current.setLength(current.length() - 1); // removes the last letter
+      }
+    }
+    
+    return output.toString();
   }
 
-	@Override
-	public int hashCode(){
-    return root.hashCode(); // recursive
-  }
 
 	@Override
-	public boolean equals(Object o){
+	public int hashCode() {
+    return wordCount * 3 + nodeCount * 5;
+  }
+
+
+	@Override
+	public boolean equals(Object o) {
 
     if (this == o) {
       return true;
@@ -121,7 +170,40 @@ public class Trie implements ITrie {
       return false;
     }
 
-    Trie trie = (Trie)o;
-    return root.equals(trie.getRoot());  // recursive
+    Trie other = (Trie)o;
+
+    if (nodeCount != other.getNodeCount() || wordCount != other.getWordCount()) {
+      return false;
+    }
+
+    return equalsHelper(root, other.getRoot());  // recursive
+  }
+
+  /**
+   * Recursive helper for equals(Object o).
+   */
+  private boolean equalsHelper(Node mine, Node other) {
+
+    // Check null parity
+    if (mine == null) {
+      return (other == null);
+    }
+    else if (other == null) {
+      return false;
+    }
+
+    // Check value parity
+    if (mine.getValue() != other.getValue()) {
+      return false;
+    }
+
+    // Check children parity
+    for (int i = 0; i < 26; i++) {
+      if (!equalsHelper(mine.getNode(i), other.getNode(i))) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }

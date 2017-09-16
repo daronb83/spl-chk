@@ -32,7 +32,6 @@ public class Main {
 		SpellCorrector corrector = new SpellCorrector();
 
 		corrector.useDictionary(dictionaryFileName);
-		corrector.printDictionary();
 
 		String suggestion = corrector.suggestSimilarWord(inputWord);
 		if (suggestion == null) {
