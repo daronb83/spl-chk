@@ -47,4 +47,9 @@ public class FreqList {
     return words.size();
   }
 
+  @Override
+  public String toString() {
+    return words.toString() + "F:" + frequency;
+  }
+
 }

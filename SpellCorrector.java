@@ -115,7 +115,7 @@ public class SpellCorrector implements ISpellCorrector{
       StringBuilder sb = new StringBuilder(word);
       sb.setCharAt(i, word.charAt(i + 1));
       sb.setCharAt(i + 1, word.charAt(i));
-      tran.add(word.toString());
+      tran.add(sb.toString());
     }
     addValidWords(tran, validWords);
     return tran;
@@ -141,7 +141,7 @@ public class SpellCorrector implements ISpellCorrector{
     for (int i = 0; i < word.length() + 1; i++) {
       for (int j = 0; j < 26; j++) {
         StringBuilder sb = new StringBuilder(word);
-        sb.insert(i, ('a' + j));
+        sb.insert(i, (char)('a' + j));
         ins.add(sb.toString());
       }
     }
@@ -191,6 +191,6 @@ public class SpellCorrector implements ISpellCorrector{
 
   @Override
   public String toString(){
-    return dictionary.toString();
+    return "\n" + dictionary.toString();
   }
 }

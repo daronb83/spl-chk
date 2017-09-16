@@ -63,9 +63,13 @@ public class Trie implements ITrie {
       else {
         return null;
       }
-
     }
-    return temp;
+
+    if (temp.getValue() > 0) {
+      return temp;
+    }
+
+    return null;
   }
 
 
