@@ -18,6 +18,7 @@ public class Trie implements ITrie {
    */
   public Trie() {
     root = new Node();
+    nodeCount = 1;
   }
 
 	/**
