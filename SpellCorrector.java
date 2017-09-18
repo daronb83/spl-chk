@@ -78,10 +78,10 @@ public class SpellCorrector implements ISpellCorrector{
     }
     else {
       // Distance 2
-      getD2(deletions, 0, validWords);
-      getD2(transpositions, 1, validWords);
-      getD2(alterations, 2, validWords);
-      getD2(insertions, 3, validWords);
+      getD2(deletions, validWords);
+      getD2(transpositions, validWords);
+      getD2(alterations, validWords);
+      getD2(insertions, validWords);
 
       if (validWords.size() > 0) {
         return validWords.getBestWord();
@@ -153,23 +153,13 @@ public class SpellCorrector implements ISpellCorrector{
    *
    *
    */
-  private void getD2(ArrayList<String> list, int type, FreqList validWords) {
+  private void getD2(ArrayList<String> list, FreqList validWords) {
 
     for (int i = 0; i < list.size(); i++) {
-      switch (type) {
-        case 0 :
-          getDel(list.get(i), validWords);
-          break;
-        case 1 :
-          getTran(list.get(i), validWords);
-          break;
-        case 2 :
-          getAlt(list.get(i), validWords);
-          break;
-        case 3 :
-          getIns(list.get(i), validWords);
-          break;
-      }
+      getDel(list.get(i), validWords);
+      getTran(list.get(i), validWords);
+      getAlt(list.get(i), validWords);
+      getIns(list.get(i), validWords);
     }
   }
 
