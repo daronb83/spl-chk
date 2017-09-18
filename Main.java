@@ -25,17 +25,14 @@ public class Main {
 			System.exit(0);
 		}
 
-
-		/**
-		 * Create an instance of your corrector here
-		 */
 		SpellCorrector corrector = new SpellCorrector();
 
 		try{
 			corrector.useDictionary(dictionaryFileName);
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Error: " + e.getMessage());
+			System.exit(0);
 		}
 
 		String suggestion = corrector.suggestSimilarWord(inputWord);

@@ -27,22 +27,26 @@ public class Trie implements ITrie {
 	 * @param word The word being added to the trie
 	 */
 	public void add(String word) {
-    Node temp = root;
 
-    for (int i = 0; i < word.length(); i++) {
-      int index = indexByLetter(word.charAt(i));
+    if (validateWord(word)) {
+      word = word.toLowerCase();
+      Node temp = root;
 
-      if (temp.hasNode(index)) {
-        temp = temp.getNode(index);
+      for (int i = 0; i < word.length(); i++) {
+        int index = indexByLetter(word.charAt(i));
+
+        if (temp.hasNode(index)) {
+          temp = temp.getNode(index);
+        }
+        else {
+          temp = temp.addNode(index);
+          nodeCount++;
+        }
       }
-      else {
-        temp = temp.addNode(index);
-        nodeCount++;
-      }
+
+      temp.incrementValue();  // the remaining node represents the last letter of the word
+      wordCount++;
     }
-
-    temp.incrementValue();  // the remaining node represents the last letter of the word
-    wordCount++;
   }
 
 	/**
@@ -53,43 +57,44 @@ public class Trie implements ITrie {
 	 * 			or null if the word is not in the trie
 	 */
 	public INode find(String word) {
-    Node temp = root;
 
-    for (int i = 0; i < word.length(); i++) {
-      int index = indexByLetter(word.charAt(i));
+    if (validateWord(word)) {
+      word = word.toLowerCase();
+      Node temp = root;
 
-      if (temp.hasNode(index)){
-          temp = temp.getNode(index);
+      for (int i = 0; i < word.length(); i++) {
+        int index = indexByLetter(word.charAt(i));
+
+        if (temp.hasNode(index)){
+            temp = temp.getNode(index);
+        }
+        else {
+          return null;
+        }
       }
-      else {
-        return null;
-      }
-    }
 
-    if (temp.getValue() > 0) {
-      return temp;
+      if (temp.getValue() > 0) {
+        return temp;
+      }
     }
 
     return null;
   }
 
-
   /**
-   * Returns the number of unique words in the trie
+   * Determines whether a String is a valid word
+   * A word is defined as a sequence of one or more alphabetic characters
    *
-   * @return The number of unique words in the trie
+   * @param word the String to validate
+   * @return true if the String is a valid word, false otherwise
    */
-  public int getWordCount() {
-    return wordCount;
-  }
-
-	/**
-	 * Returns the number of children in the trie
-	 *
-	 * @return The number of children in the trie
-	 */
-	public int getNodeCount() {
-    return nodeCount;
+  public boolean validateWord(String word) {
+    for (int i = 0; i < word.length(); i++) {
+      if (!Character.isLetter(word.charAt(i))) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**
@@ -121,6 +126,24 @@ public class Trie implements ITrie {
    */
   public Node getRoot() {
     return root;
+  }
+
+  /**
+   * Returns the number of unique words in the trie
+   *
+   * @return The number of unique words in the trie
+   */
+  public int getWordCount() {
+    return wordCount;
+  }
+
+  /**
+   * Returns the number of children in the trie
+   *
+   * @return The number of children in the trie
+   */
+  public int getNodeCount() {
+    return nodeCount;
   }
 
 	/**

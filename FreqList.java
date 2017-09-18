@@ -39,10 +39,18 @@ public class FreqList {
    * @return the first word (alphabetically) at the current frequency
    */
   public String getBestWord() {
-    Collections.sort(words);
-    return words.get(0);
+
+    if (words.size() > 0) {
+      Collections.sort(words);
+      return words.get(0);
+    }
+
+    return null;
   }
 
+  /**
+   * @return the number of words stored at the current frequency
+   */
   public int size() {
     return words.size();
   }
